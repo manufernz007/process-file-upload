@@ -3,16 +3,16 @@
     'use strict';
 
     angular.module('fileupload', ['ngSanitize']).controller('HomeController', [
-            '$scope', '$http', '$rootScope',
-            function ($scope, $http, $rootScope) {
-            $rootScope.hideForm = false;
+            '$scope', '$http',
+            function ($scope, $http) {
+
             }
         ]).directive('processFileUploader', function () {
         return {
 
             restrict: 'E',
-            controller: function ($rootScope, $http, $scope, $sce) {
-                $rootScope.hideForm = false;
+            controller: function ($http, $scope, $sce) {
+                $scope.hideForm = false;
 
                 $('#fileupload').fileupload({
                         url: "https://upload.wistia.com",
@@ -21,15 +21,15 @@
                         },
                         dataType: 'json',
                         done: function (e, data) {
-                            $rootScope.id = data.result.hashed_id;
-                            $rootScope.hideForm = true;
+                            $scope.id = data.result.hashed_id;
+                            $scope.hideForm = true;
 
-                            $rootScope.wistia_async_id = "wistia_async_" + $rootScope.id;
+                            $scope.wistia_async_id = "wistia_async_" + $scope.id;
 
                             $sce.trustAsHtml($scope.embed);
                             var j = document.createElement('script');
                             j.type = 'text/javascript';
-                            j.src = '//fast.wistia.com/embed/medias/' + $rootScope.id + '.jsonp';
+                            j.src = '//fast.wistia.com/embed/medias/' + $scope.id + '.jsonp';
                             document.getElementsByTagName('head')[0].appendChild(j);
                             var k = document.createElement('script');
                             k.type = 'text/javascript';
